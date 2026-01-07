@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router'
 
 const SignUp = () => {
+    const [details, setDetails] = useState({
+        username: "",
+        email: "",
+        password: "",
+    })
+
+    const handleChange=(e)=>{
+        setDetails(
+           { ...details,[e.target.name]: e.target.value}
+        )
+        
+    }
+console.log(details)
     return (
         <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-indigo-500 border-2 rounded py-2">               
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-indigo-500 border-2 rounded py-2">
                 <h2 className="text-center text-2xl/9 font-bold tracking-tight text-white">
                     Sign Up for your account
                 </h2>
@@ -20,6 +33,7 @@ const SignUp = () => {
                         </label>
                         <div className="mt-2">
                             <input
+                                onChange={handleChange}
                                 id="username"
                                 type="text"
                                 name="username"
@@ -38,6 +52,7 @@ const SignUp = () => {
                         </label>
                         <div className="mt-2">
                             <input
+                                onChange={handleChange}
                                 id="email"
                                 type="email"
                                 name="email"
@@ -55,10 +70,11 @@ const SignUp = () => {
                             >
                                 Password
                             </label>
-                           
+
                         </div>
                         <div className="mt-2">
                             <input
+                                onChange={handleChange}
                                 id="password"
                                 type="password"
                                 name="password"
@@ -83,7 +99,7 @@ const SignUp = () => {
                         to="/signin"
                         className="font-semibold text-indigo-400 hover:text-indigo-300"
                     >
-                          Sign In
+                        Sign In
                     </Link>
                 </p>
             </div>
