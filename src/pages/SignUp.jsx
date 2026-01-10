@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router'
+import React, { useState } from 'react';
+import { Link } from 'react-router';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
     const [details, setDetails] = useState({
@@ -7,14 +8,17 @@ const SignUp = () => {
         email: "",
         password: "",
     })
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleChange=(e)=>{
+    const handleChange = (e) => {
         setDetails(
-           { ...details,[e.target.name]: e.target.value}
+            { ...details, [e.target.name]: e.target.value }
         )
-        
     }
-console.log(details)
+    const handleSignUp = () => {
+        alert(details)
+    }
+
     return (
         <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-indigo-500 border-2 rounded py-2">
@@ -72,20 +76,26 @@ console.log(details)
                             </label>
 
                         </div>
-                        <div className="mt-2">
+                        <div className="mt-2 relative flex items-center">
                             <input
                                 onChange={handleChange}
                                 id="password"
-                                type="password"
+                                type={showPassword? "text" : "password"}
                                 name="password"
                                 required=""
                                 autoComplete="current-password"
                                 className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                             />
+                            {showPassword ?
+                                <FaEye onClick={()=>setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
+                                :
+                                <FaEyeSlash onClick={()=>setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
+                            }
                         </div>
                     </div>
                     <div>
                         <button
+                            onClick={handleSignUp}
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                         >
