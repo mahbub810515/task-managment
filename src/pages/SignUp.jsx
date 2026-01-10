@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
     const [details, setDetails] = useState({
@@ -16,7 +17,13 @@ const SignUp = () => {
         )
     }
     const handleSignUp = () => {
-        alert(details)
+        if (details.username && details.email && details.password) {
+            setTimeout(() => {
+                toast.success('signup Successfully!')
+            }, 2000);
+        } else {
+            alert("please fill everything")
+        }
     }
 
     return (
@@ -80,16 +87,16 @@ const SignUp = () => {
                             <input
                                 onChange={handleChange}
                                 id="password"
-                                type={showPassword? "text" : "password"}
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 required=""
                                 autoComplete="current-password"
                                 className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                             />
                             {showPassword ?
-                                <FaEye onClick={()=>setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
+                                <FaEye onClick={() => setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
                                 :
-                                <FaEyeSlash onClick={()=>setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
+                                <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
                             }
                         </div>
                     </div>
