@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from 'react-hot-toast';
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { auth } from '../firebase.config';
+
 
 const SignUp = () => {
     const [details, setDetails] = useState({
@@ -23,9 +26,9 @@ const SignUp = () => {
     const handleSignUp = () => {
         let valid = false;
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if(regex.test(details.email)){
-            valid = true;           
-        }else{
+        if (regex.test(details.email)) {
+            valid = true;
+        } else {
             valid = false;
         }
         if (!details.username) {
@@ -36,9 +39,32 @@ const SignUp = () => {
         }
         if (!details.password) {
             setPasswordError("password is required");
-        } 
+        }
         else if (details.username && details.email && details.password && valid) {
-            toast.success("signup successfull");
+            createUserWithEmailAndPassword(auth, details.email, details.password)
+                .then((userCredential) => {
+                    updateProfile(auth.currentUser, {
+                        displayName: details.username,
+                    }).then(() => {
+                        sendEmailVerification(auth.currentUser)
+                            .then(() => {
+                                // Email verification sent! 
+                                const user = userCredential.user;
+                                setDetails({
+                                    username: "",
+                                    email: "",
+                                    password: "",
+                                })
+                                toast.success("user created succesfully");
+                            })
+
+                    })
+
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    console.log(errorMessage)
+                });
         }
 
     }
@@ -62,6 +88,7 @@ const SignUp = () => {
                         <div className="mt-2">
                             <input
                                 onChange={handleChange}
+                                value={details.username}
                                 id="username"
                                 type="text"
                                 name="username"
@@ -81,13 +108,14 @@ const SignUp = () => {
                         <div className="mt-2">
                             <input
                                 onChange={handleChange}
+                                value={details.email}
                                 id="email"
                                 type="email"
                                 name="email"
                                 required=""
                                 autoComplete="email"
                                 className={`block w-full rounded-md border ${emailError ? "border-red-500" : " border-green-500"} bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
-                              />      
+                            />
                         </div>
                     </div>
                     <div>
@@ -103,12 +131,13 @@ const SignUp = () => {
                         <div className="mt-2 relative flex items-center">
                             <input
                                 onChange={handleChange}
+                                value={details.password}
                                 id="password"
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 required=""
                                 autoComplete="current-password"
-                                 className={`block w-full rounded-md border ${passwordError? "border-red-500":" border-green-500" } bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`} 
+                                className={`block w-full rounded-md border ${passwordError ? "border-red-500" : " border-green-500"} bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
                             />
                             {showPassword ?
                                 <FaEye onClick={() => setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
