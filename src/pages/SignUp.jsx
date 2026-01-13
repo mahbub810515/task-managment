@@ -10,6 +10,10 @@ const SignUp = () => {
         password: "",
     })
     const [showPassword, setShowPassword] = useState(false);
+    // validation for usernam,email and password
+    const [userError, setuserError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
 
     const handleChange = (e) => {
         setDetails(
@@ -17,13 +21,26 @@ const SignUp = () => {
         )
     }
     const handleSignUp = () => {
-        if (details.username && details.email && details.password) {
-            setTimeout(() => {
-                toast.success('signup Successfully!')
-            }, 2000);
-        } else {
-            alert("please fill everything")
+        let valid = false;
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(regex.test(details.email)){
+            valid = true;           
+        }else{
+            valid = false;
         }
+        if (!details.username) {
+            setuserError("username is required");
+        }
+        if (!valid) {
+            setEmailError("email is required");
+        }
+        if (!details.password) {
+            setPasswordError("password is required");
+        } 
+        else if (details.username && details.email && details.password && valid) {
+            toast.success("signup successfull");
+        }
+
     }
 
     return (
@@ -50,7 +67,7 @@ const SignUp = () => {
                                 name="username"
                                 required=""
                                 autoComplete="email"
-                                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                                className={`block w-full rounded-md border ${userError ? "border-red-500" : " border-green-500"} bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
                             />
                         </div>
                     </div>
@@ -69,8 +86,8 @@ const SignUp = () => {
                                 name="email"
                                 required=""
                                 autoComplete="email"
-                                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                            />
+                                className={`block w-full rounded-md border ${emailError ? "border-red-500" : " border-green-500"} bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
+                              />      
                         </div>
                     </div>
                     <div>
@@ -91,7 +108,7 @@ const SignUp = () => {
                                 name="password"
                                 required=""
                                 autoComplete="current-password"
-                                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                                 className={`block w-full rounded-md border ${passwordError? "border-red-500":" border-green-500" } bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`} 
                             />
                             {showPassword ?
                                 <FaEye onClick={() => setShowPassword(!showPassword)} className='absolute right-3 text-white text-2xl' />
@@ -103,7 +120,7 @@ const SignUp = () => {
                     <div>
                         <button
                             onClick={handleSignUp}
-                            type="submit"
+                            type="button"
                             className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                         >
                             Sign in
