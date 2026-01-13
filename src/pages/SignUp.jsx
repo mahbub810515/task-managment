@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
@@ -12,6 +12,7 @@ const SignUp = () => {
         email: "",
         password: "",
     })
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     // validation for usernam,email and password
     const [userError, setuserError] = useState("");
@@ -56,6 +57,9 @@ const SignUp = () => {
                                     password: "",
                                 })
                                 toast.success("user created succesfully");
+                                setTimeout(() => {                                    
+                                    navigate("/signin");
+                                }, 2000);
                             })
 
                     })
