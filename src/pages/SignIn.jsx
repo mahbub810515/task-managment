@@ -1,32 +1,52 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import { Link } from 'react-router'
+import { Link,useNavigate } from 'react-router'
+import { signInWithEmailAndPassword  } from "firebase/auth";
+import {auth} from "..//firebase.config"
 
 
 const SignIn = () => {
-    let [details,setDetails]=useState([
+    let navigate = useNavigate() 
+    let [details, setDetails] = useState([
         {
-            username:"",
-            password:"",
+            username: "",
+            password: "",
         }
     ])
-    let handleChange=(e)=>{
-        setDetails({...details,
-            [e.target.name]:e.target.value
+    let handleChange = (e) => {
+        setDetails({
+            ...details,
+            [e.target.name]: e.target.value
         })
     }
-    
-    const handleSignIn=()=>{
-        if(details.email && details.password){
-            toast.success("log in successfully");
 
-        }else{
-            toast.success("envalid username or passord");
+    const handleSignIn = () => {
+        if (details.email && details.password) {
+            signInWithEmailAndPassword(auth, details.email,details.password)
+                .then((userCredential) => {
+                    // Signed up 
+                    const user = userCredential.user;
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 2000);
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;                   
+                    if(errorCode==="auth/invalid-credential"){
+                        toast.error("Invalid Credential")
+                    }
+                   
+                    // ..
+                });
+
+        } else {
+            toast.error("envalid username or passord");
         }
     }
-  return (
-   <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm  bg-indigo-500 border-2 rounded py-2">               
+    return (
+        <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm  bg-indigo-500 border-2 rounded py-2">
                 <h2 className="text-center text-2xl/9 font-bold tracking-tight text-white">
                     Sign in to your account
                 </h2>
@@ -60,11 +80,11 @@ const SignIn = () => {
                             >
                                 Password
                             </label>
-                           
+
                         </div>
                         <div className="mt-2">
                             <input
-                            onChange={handleChange}
+                                onChange={handleChange}
                                 id="password"
                                 type="password"
                                 name="password"
@@ -96,7 +116,7 @@ const SignIn = () => {
             </div>
         </div>
 
-  )
+    )
 }
 
 export default SignIn
