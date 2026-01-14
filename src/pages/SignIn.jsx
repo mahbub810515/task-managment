@@ -1,7 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import { Link } from 'react-router'
 
+
 const SignIn = () => {
+    let [details,setDetails]=useState([
+        {
+            username:"",
+            password:"",
+        }
+    ])
+    let handleChange=(e)=>{
+        setDetails({...details,
+            [e.target.name]:e.target.value
+        })
+    }
+    
+
   return (
    <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm  bg-indigo-500 border-2 rounded py-2">               
@@ -20,6 +35,7 @@ const SignIn = () => {
                         </label>
                         <div className="mt-2">
                             <input
+                                onChange={handleChange}
                                 id="email"
                                 type="email"
                                 name="email"
@@ -41,6 +57,7 @@ const SignIn = () => {
                         </div>
                         <div className="mt-2">
                             <input
+                            
                                 id="password"
                                 type="password"
                                 name="password"
@@ -52,7 +69,8 @@ const SignIn = () => {
                     </div>
                     <div>
                         <button
-                            type="submit"
+                            onClick={handleSignIn}
+                            type="button"
                             className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                         >
                             Sign in
