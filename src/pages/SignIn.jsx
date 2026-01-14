@@ -16,7 +16,14 @@ const SignIn = () => {
         })
     }
     
+    const handleSignIn=()=>{
+        if(details.email && details.password){
+            toast.success("log in successfully");
 
+        }else{
+            toast.success("envalid username or passord");
+        }
+    }
   return (
    <div className="bg-black flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm  bg-indigo-500 border-2 rounded py-2">               
@@ -57,7 +64,7 @@ const SignIn = () => {
                         </div>
                         <div className="mt-2">
                             <input
-                            
+                            onChange={handleChange}
                                 id="password"
                                 type="password"
                                 name="password"
